@@ -3,6 +3,19 @@
 hide circle
 skinparam inetype ortho
 
+entity User {
+    +id: uuid
+    --
+    ~iconId: int
+}
+note right of User: idはsocketIdに対応
+
+entity Icon {
+    +id: int
+    --
+    #description: string
+}
+
 entity Room {
     +id: uuid
     --
@@ -36,13 +49,13 @@ entity TopicState {
 }
 
 entity ChatItem {
-    +id: int
+    +id: uuid
     --
     ~roomId: uuid
     ~topicId: int
+    ~userId: uuid
+    ~typeId: int
     ~targetId uuid
-    ~iconId: string
-    #type: string
     content: string
     #timestamp: int
     #createdAt: timestamp
@@ -54,18 +67,31 @@ note bottom of ChatItem
  また、複数のChatItemが同じChatItemに返信することもできる。
 end note
 
-entity Icon {
-    +id: string
+entity ChatItemType {
+    +id: int
     --
     #description: string
 }
 
-Room ||--|{ Topic
+entity Stamp {
+    +id: int
+    --
+    ~roomId: uuid
+    ~topicId: int
+    ~userId: uuid
+    #createdAt: timestamp
+}
+
+User }o--|| Icon
 Room }o--|| RoomStatus
-Topic ||--o{ ChatItem
+Topic }|--|| Room
 Topic }o--|| TopicState
+ChatItem }o--|| Topic
+ChatItem }o--|| User
+ChatItem }o--|| ChatItemType
 ChatItem |o--o{ ChatItem
-ChatItem }o--|| Icon
+Stamp }o--|| Topic
+Stamp }o--|| User
 
 entity Example {
     +primary_key: type
