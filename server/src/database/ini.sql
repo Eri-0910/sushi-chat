@@ -29,6 +29,8 @@ CREATE TABLE ChatItems (
   targetId UUID REFERENCES ChatItems(id)
 );
 
+-- ChatItemsに統合したから使っていないらしい↓
+
 -- CREATE TABLE Messages (
 --   id UUID NOT NULL PRIMARY KEY,
 --   roomId UUID NOT NULL REFERENCES Rooms(id),
