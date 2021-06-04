@@ -1,0 +1,78 @@
+@startuml
+
+hide circle
+skinparam inetype ortho
+
+entity Room {
+    +id: uuid
+    --
+    ~status: int
+    #roomKey: string
+    #title: string
+}
+
+entity RoomStatus {
+    +id: int
+    --
+    #description: string
+}
+
+entity Topic {
+    +id: int
+    ~roomId: uuid
+    --
+    #title string
+    #description: string
+    #state: int
+    githubUrl: string
+    slideUrl: string
+    productUrl: string
+}
+
+entity TopicState {
+    +id: int
+    --
+    #description: string
+}
+
+entity ChatItem {
+    +id: int
+    --
+    ~roomId: uuid
+    ~topicId: int
+    ~targetId uuid
+    ~iconId: string
+    #type: string
+    content: string
+    #timestamp: int
+    #createdAt: timestamp
+}
+note bottom of ChatItem
+ あるChatItemがその他のChatItemに対する返信の場合、
+ 返信先のChatItemのidがtargetIdに入る。
+ 返信でないChatItemのtargetIdにはNULLが入る。
+ また、複数のChatItemが同じChatItemに返信することもできる。
+end note
+
+entity Icon {
+    +id: string
+    --
+    #description: string
+}
+
+Room ||--|{ Topic
+Room }o--|| RoomStatus
+Topic ||--o{ ChatItem
+Topic }o--|| TopicState
+ChatItem |o--o{ ChatItem
+ChatItem }o--|| Icon
+
+entity Example {
+    +primary_key: type
+    --
+    ~foreign_key: type
+    #not null: type
+}
+note bottom: 上からそれぞれ<<PK>>, <<FK>>, <<NOT NULL>>を表す記号
+
+@enduml

@@ -1,0 +1,51 @@
+@startuml
+
+hide circle
+skinparam inetype ortho
+
+entity Room {
+    +id: uuid
+    --
+    #roomKey: string
+    #title: string
+    #status: int
+}
+
+entity Topic {
+    +id: int
+    ~roomId: uuid
+    --
+    #title string
+    #description: string
+    #state: int
+    githubUrl: string
+    slideUrl: string
+    productUrl: string
+}
+
+entity ChatItem {
+    +id: int
+    --
+    ~roomId: uuid
+    ~topicId: int
+    ~targetId uuid
+    #type: string
+    content: string
+    #iconId: string
+    #timestamp: int
+    #createdAt: timestamp
+}
+
+Room ||--|{ Topic
+Topic ||--|{ ChatItem
+ChatItem |o--o| ChatItem
+
+entity Example {
+    +primary_key: type
+    --
+    ~foreign_key: type
+    #not null: type
+}
+note bottom: 上からそれぞれ<<PK>>, <<FK>>, <<NOT NULL>>を表す記号
+
+@enduml
